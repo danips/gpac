@@ -380,6 +380,18 @@ static GF_Err mp4_input_ctrl(GF_ESInterface *ifce, u32 act_type, void *param)
 				tc += ((u64) temi_offset) * ifce->timescale / 1000;
 			}
 
+			/* Jump to 59.4 at 30 seconds */
+			/*static char apply = 0;
+			printf("%lu ", tc);
+			if (tc >= 384000) {
+				if (apply == 0) {
+					apply = 1;
+					printf("*** Messing TEMI * ");
+				}
+				tc += 376320;
+			}
+			printf("%lu\n", tc);*/
+
 			if (priv->insert_ntp) {
 				u32 sec, frac;
 				gf_net_get_ntp(&sec, &frac);
@@ -2668,7 +2680,7 @@ int main(int argc, char **argv)
 
 			if (sources[i].streams[j].stream_type==GF_STREAM_SCENE) force_pes_mode = bifs_use_pes ? 1 : 0;
 
-			stream = gf_m2ts_program_stream_add(program, &sources[i].streams[j], cur_pid+j+1, (sources[i].pcr_idx==j) ? 1 : 0, force_pes_mode);
+			stream = gf_m2ts_program_stream_add(program, &sources[i].streams[j], cur_pid+j+901, (sources[i].pcr_idx==j) ? 1 : 0, force_pes_mode);
 			if (split_rap && (sources[i].streams[j].stream_type==GF_STREAM_VISUAL)) stream->start_pes_at_rap = 1;
 		}
 
